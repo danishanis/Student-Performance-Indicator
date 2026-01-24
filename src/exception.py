@@ -5,10 +5,11 @@ def error_message_detail(error,error_detail:sys):
     """
     custom message to be pushed in logs whenever exception occurs
     """
-    _,_,exc_tb=error_detail.exc_info()
-    file_name=exc_tb.tb_frame.f_code.co_filename
-    error_message="Error occured in python script name [{0}] line number [{1}] error message[{2}]".format(
-     file_name,exc_tb.tb_lineno,str(error))
+    _,_,exc_tb = error_detail.exc_info() # exc_info() returns a tuple of three values that gives information about the exception that is currently being handled.
+    file_name = exc_tb.tb_frame.f_code.co_filename
+    error_message = "Error occured in python script name [{0}] in line number [{1}]. The error message is: \
+        [{2}]".format(
+     file_name, exc_tb.tb_lineno, str(error))
 
     return error_message
 
