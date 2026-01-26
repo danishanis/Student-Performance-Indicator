@@ -19,3 +19,11 @@ logging.basicConfig(
 
 
 )
+
+# Checking if logging is working fine
+# if __name__ == "__main__":
+#     logging.info("Logging has started")
+#     try:
+#         a = 1 / 0
+#     except Exception as e:
+#         logging.error("Exception occurred", exc_info=True)
