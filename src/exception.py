@@ -33,6 +33,12 @@ class CustomException(Exception):
     def __str__(self):
         return self.error_message
     
-
+# Checking if exception is working fine
+# if __name__ == "__main__":
+#     try:
+#         a = 1 / 0
+#     except Exception as e:
+#         logging.info("Divide by zero exception occurred", exc_info=True)
+#         raise CustomException
 
         
