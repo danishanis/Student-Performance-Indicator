@@ -81,9 +81,11 @@ class DataTransformation:
         
         except Exception as e:
             raise CustomException(e, sys)
-        
-    def initiate_data_transformation(self,train_path,test_path):
 
+    def initiate_data_transformation(self, train_path, test_path):
+        """
+        Transforming ingested data that is split into train and test sets.
+        """
         try:
             train_df = pd.read_csv(train_path)
             test_df = pd.read_csv(test_path)
@@ -97,10 +99,13 @@ class DataTransformation:
             target_column_name = "math_score"
             numerical_columns = ["writing_score", "reading_score"]
 
-            input_feature_train_df = train_df.drop(columns=[target_column_name],axis=1)
+            input_feature_train_df = train_df.drop(columns = [target_column_name],
+                                                   axis = 1)
             target_feature_train_df = train_df[target_column_name]
 
-            input_feature_test_df = test_df.drop(columns=[target_column_name],axis=1)
+            
+            input_feature_test_df = test_df.drop(columns = [target_column_name],
+                                                 axis=1)
             target_feature_test_df = test_df[target_column_name]
 
             logging.info(
@@ -110,6 +115,8 @@ class DataTransformation:
             input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
             input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
 
+            # Concatenating input & target features into single numpy arrays using np.c_
+            # combining fatures & target into continuous arrays simplifies data handling for scaling/transforming
             train_arr = np.c_[
                 input_feature_train_arr, np.array(target_feature_train_df)
             ]
@@ -118,10 +125,8 @@ class DataTransformation:
             logging.info(f"Saved preprocessing object.")
 
             save_object(
-
-                file_path=self.data_transformation_config.preprocessor_obj_file_path,
-                obj=preprocessing_obj
-
+                file_path = self.data_transformation_config.preprocessor_obj_file_path,
+                obj = preprocessing_obj
             )
 
             return (
