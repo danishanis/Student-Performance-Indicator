@@ -2,6 +2,8 @@ import os
 import sys
 from dataclasses import dataclass
 
+import catboost, sklearn, inspect
+
 from catboost import CatBoostRegressor
 from sklearn.ensemble import (
     AdaBoostRegressor,
@@ -37,6 +39,20 @@ class ModelTrainer:
                 test_array[:,:-1],
                 test_array[:,-1]
             )
+
+            # In case of __sklearn_tags__ issue with CatboostRegressor, check below debug info
+
+            # print("PYTHON:", sys.executable)
+            # print("sklearn:", sklearn.__version__)
+            # print("catboost:", catboost.__version__)
+            # print("CatBoostRegressor type:", CatBoostRegressor)
+            # print("CatBoostRegressor module:", CatBoostRegressor.__module__)
+            # print("CatBoostRegressor file:", inspect.getfile(CatBoostRegressor))
+
+            # m = CatBoostRegressor(verbose=False)
+            # print("Instance type:", type(m))
+            # print("Has __sklearn_tags__:", hasattr(m, "__sklearn_tags__"))
+
             models = {
                 "Random Forest": RandomForestRegressor(),
                 "Decision Tree": DecisionTreeRegressor(),
