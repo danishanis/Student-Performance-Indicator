@@ -23,12 +23,18 @@ from src.utils import save_object,evaluate_models
 
 @dataclass
 class ModelTrainerConfig:
-    trained_model_file_path=os.path.join("artifacts","model.pkl")
+    """
+    Stores Model trainer configs;
+    Any input rquired within the model trainer component 
+    can be added here.
+    The ModelTrainerConfig component's output will be saving model trainer as .pkl files.
+    """
+    trained_model_file_path = os.path.join("artifacts",
+                                           "model.pkl")
 
 class ModelTrainer:
     def __init__(self):
-        self.model_trainer_config=ModelTrainerConfig()
-
+        self.model_trainer_config = ModelTrainerConfig()
 
     def initiate_model_trainer(self,train_array,test_array):
         try:
@@ -115,7 +121,7 @@ class ModelTrainer:
 
             if best_model_score<0.6:
                 raise CustomException("No best model found")
-            logging.info(f"Best found model on both training and testing dataset")
+            logging.info(f"Found best model on both training and testing dataset: {best_model_name}")
 
             save_object(
                 file_path=self.model_trainer_config.trained_model_file_path,
