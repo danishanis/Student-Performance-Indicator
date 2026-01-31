@@ -13,6 +13,9 @@ from src.exception import CustomException
 def save_object(file_path, obj):
     """
     Function to save object as a pickle file.
+    Input Param:
+        file_path: Pickle file path (eg. transformation/model training config file) to create directory if not exists
+        obj: File object (eg. transformation/model training config file) to be saved as a pickle file
     """
     try:
         dir_path = os.path.dirname(file_path)
@@ -28,12 +31,15 @@ def save_object(file_path, obj):
 def evaluate_models(X_train, y_train,
                     X_test,y_test,
                     models, param):
+    """
+    Function to evaluate models using GridSearchCV and return their test R2 scores.
+    """
     try:
         report = {}
 
         for i in range(len(list(models))):
             model = list(models.values())[i]
-            para=param[list(models.keys())[i]]
+            para = param[list(models.keys())[i]]
 
             gs = GridSearchCV(model,para,cv=3)
             gs.fit(X_train,y_train)
