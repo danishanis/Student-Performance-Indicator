@@ -15,7 +15,7 @@ def save_object(file_path, obj):
     Function to save object as a pickle file.
     Input Param:
         file_path: Pickle file path (eg. transformation/model training config file) to create directory if not exists
-        obj: File object (eg. transformation/model training config file) to be saved as a pickle file
+        obj: File object containing a given logic to be implemented entirely (eg. transformation/model training config file) and to be saved as a pickle file
     """
     try:
         dir_path = os.path.dirname(file_path)
