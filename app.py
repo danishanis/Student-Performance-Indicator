@@ -11,7 +11,8 @@ application = Flask(__name__)
 
 app = application
 
-## Route for a home page
+## Creating the API contract so all services can call the 
+# API with the same endpoint ('/'. '/predictdata')
 
 @app.route('/')
 def index():
