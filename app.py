@@ -32,15 +32,15 @@ def predict_datapoint():
             writing_score = float(request.form.get('writing_score'))
 
         )
-        pred_df=data.get_data_as_data_frame()
+        pred_df = data.get_data_as_data_frame()
         print(pred_df)
         print("Before Prediction")
 
-        predict_pipeline=PredictPipeline()
+        predict_pipeline = PredictPipeline()
         print("Mid Prediction")
-        results=predict_pipeline.predict(pred_df)
+        results = predict_pipeline.predict(pred_df)
         print("after Prediction")
-        return render_template('home.html',results=results[0])
+        return render_template('home.html', results=results[0])
     
 
 if __name__=="__main__":
