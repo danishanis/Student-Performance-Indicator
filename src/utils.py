@@ -65,6 +65,9 @@ def evaluate_models(X_train, y_train,
         raise CustomException(e, sys)
     
 def load_object(file_path):
+    """
+    Opens the pickle file path in read-binary mode and loads the object from the file.
+    """
     try:
         with open(file_path, "rb") as file_obj:
             return pickle.load(file_obj)
