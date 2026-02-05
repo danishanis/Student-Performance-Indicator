@@ -60,6 +60,13 @@ jobs:
         with:
           name: python-app
           path: .
+
+      - name: 'Azure login (OIDC)'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
@@ -67,4 +74,4 @@ jobs:
         with:
           app-name: 'studentssperformance3'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DA91177C75E346B4BD3AD2EF1D318517 }}
+          package: .
