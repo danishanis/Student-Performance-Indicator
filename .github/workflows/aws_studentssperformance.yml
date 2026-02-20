@@ -62,7 +62,6 @@ jobs:
               run: echo "Running unit tests"
 
     build-and-push-ecr-image:
-        name: Continuous Delivery
         needs: integration
         runs-on: ubuntu-latest
         steps:
@@ -79,7 +78,7 @@ jobs:
               with:
                 aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                 aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                aws-region: ${{ env.AWS_REGION }}
+                aws-region: ${{ secrets.AWS_REGION }}
 
             - name: Login to Amazon ECR
               id: login-ecr
@@ -89,7 +88,8 @@ jobs:
               id: build-image
               env:
                 ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-                IMAGE_TAG: ${{ github.sha }}
+                ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
+                IMAGE_TAG: latest
               run: |
                 # Build a docker container and
                 # push it to ECR so that it can
@@ -98,6 +98,7 @@ jobs:
                 docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
     deployment:
+        name: Continuous Deployment
         needs: build-and-push-ecr-image
         runs-on: self-hosted
         steps:
@@ -109,7 +110,7 @@ jobs:
               with:
                 aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                 aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                aws-region: ${{ env.AWS_REGION }}
+                aws-region: ${{ secrets.AWS_REGION }}
             
             - name: Login to Amazon ECR
               id: login-ecr
@@ -120,22 +121,22 @@ jobs:
                 docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
 
             #
-            - name: Fill in the new image ID in the Amazon ECS task definition
-              id: task-def
-              uses: aws-actions/amazon-ecs-render-task-definition@v1
-              with:
-                task-definition: ${{ env.ECS_TASK_DEFINITION }}
-                container-name: ${{ env.CONTAINER_NAME }}
-                image: ${{ steps.build-image.outputs.image }}
+            # - name: Fill in the new image ID in the Amazon ECS task definition
+            #   id: task-def
+            #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+            #   with:
+            #     task-definition: ${{ env.ECS_TASK_DEFINITION }}
+            #     container-name: ${{ env.CONTAINER_NAME }}
+            #     image: ${{ steps.build-image.outputs.image }}
             
             #
-            - name: Deploy Amazon ECS task definition
-              uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-              with:
-                task-definition: ${{ steps.task-def.outputs.task-definition }}
-                service: ${{ env.ECS_SERVICE }}
-                cluster: ${{ env.ECS_CLUSTER }}
-                wait-for-service-stability: true
+            # - name: Deploy Amazon ECS task definition
+            #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+            #   with:
+            #     task-definition: ${{ steps.task-def.outputs.task-definition }}
+            #     service: ${{ env.ECS_SERVICE }}
+            #     cluster: ${{ env.ECS_CLUSTER }}
+            #     wait-for-service-stability: true
 
             - name: Run Docker Image to serve users
               run: |
